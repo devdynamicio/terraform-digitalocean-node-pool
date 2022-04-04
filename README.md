@@ -72,16 +72,16 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_auto_scale"></a> [auto\_scale](#input\_auto\_scale) | (optional) | `bool` | `null` | no |
-| <a name="input_cluster_id"></a> [cluster\_id](#input\_cluster\_id) | (required) | `string` | n/a | yes |
-| <a name="input_labels"></a> [labels](#input\_labels) | (optional) | `map(string)` | `null` | no |
-| <a name="input_max_nodes"></a> [max\_nodes](#input\_max\_nodes) | (optional) | `number` | `null` | no |
-| <a name="input_min_nodes"></a> [min\_nodes](#input\_min\_nodes) | (optional) | `number` | `null` | no |
-| <a name="input_name"></a> [name](#input\_name) | (required) | `string` | n/a | yes |
-| <a name="input_node_count"></a> [node\_count](#input\_node\_count) | (optional) | `number` | `null` | no |
-| <a name="input_size"></a> [size](#input\_size) | (required) | `string` | n/a | yes |
-| <a name="input_tags"></a> [tags](#input\_tags) | (optional) | `set(string)` | `null` | no |
-| <a name="input_taint"></a> [taint](#input\_taint) | nested block: NestingSet, min items: 0, max items: 0 | <pre>set(object(<br>    {<br>      effect = string<br>      key    = string<br>      value  = string<br>    }<br>  ))</pre> | `[]` | no |
+| <a name="input_auto_scale"></a> [auto\_scale](#input\_auto\_scale) | Enable auto-scaling of the number of nodes in the node pool within the given min/max range. | `bool` | `false` | no |
+| <a name="input_cluster_id"></a> [cluster\_id](#input\_cluster\_id) | The ID of the Kubernetes cluster to which the node pool is associated. | `string` | n/a | yes |
+| <a name="input_labels"></a> [labels](#input\_labels) | A map of key/value pairs to apply to nodes in the pool. The labels are exposed in the Kubernetes API as labels in the metadata of the corresponding Node resources. | `map(string)` | `null` | no |
+| <a name="input_max_nodes"></a> [max\_nodes](#input\_max\_nodes) | If auto-scaling is enabled, this represents the maximum number of nodes that the node pool can be scaled up to. | `number` | `null` | no |
+| <a name="input_min_nodes"></a> [min\_nodes](#input\_min\_nodes) | If auto-scaling is enabled, this represents the minimum number of nodes that the node pool can be scaled down to. | `number` | `null` | no |
+| <a name="input_name"></a> [name](#input\_name) | A name for the node pool. | `string` | n/a | yes |
+| <a name="input_node_count"></a> [node\_count](#input\_node\_count) | The number of Droplet instances in the node pool. If auto-scaling is enabled, this should only be set if the desired result is to explicitly reset the number of nodes to this value. If auto-scaling is enabled, and the node count is outside of the given min/max range, it will use the min nodes value. | `number` | `null` | no |
+| <a name="input_size"></a> [size](#input\_size) | The slug identifier for the type of Droplet to be used as workers in the node pool. | `string` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | A list of tag names to be applied to the Kubernetes cluster. | `set(string)` | `null` | no |
+| <a name="input_taint"></a> [taint](#input\_taint) | A list of taints applied to all nodes in the pool. | <pre>set(object(<br>    {<br>      effect = string<br>      key    = string<br>      value  = string<br>    }<br>  ))</pre> | `[]` | no |
 
 ## Outputs
 
