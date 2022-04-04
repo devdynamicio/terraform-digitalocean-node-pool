@@ -22,27 +22,25 @@ module "kubernetes" {
 
 module "kubernetes_node_pool" {
   source     = "../../"
+  auto_scale = true
   cluster_id = module.kubernetes.id
-  node_pools = {
-    "ops" = {
-      auto_scale = true
-      min_nodes  = 1
-      max_nodes  = 3
-      node_count = 1
-      size       = "s-1vcpu-2gb"
-      node_labels = {
-        env     = "dev"
-        service = "kubernetes"
-        made-by = "terraform"
-      }
-      node_taint = {
-        key    = "workloadKind"
-        value  = "example"
-        effect = "NoSchedule"
-      }
-      node_tags = ["kubernetes", "nodes"]
-    }
+  labels = {
+    env     = "dev"
+    service = "kubernetes"
+    made-by = "terraform"
   }
+  max_nodes  = 2
+  min_nodes  = 1
+  name       = "dev"
+  node_count = 1
+  size       = "s-1vcpu-2gb"
+  tags       = ["kubernetes", "nodes"]
+
+  taint = [{
+    key    = "workloadKind"
+    value  = "dev"
+    effect = "NoSchedule"
+  }]
 }
 ```
 
@@ -74,10 +72,22 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_cluster_id"></a> [cluster\_id](#input\_cluster\_id) | The ID of the Kubernetes cluster to which the node pool is associated. | `string` | n/a | yes |
-| <a name="input_node_pools"></a> [node\_pools](#input\_node\_pools) | Digitalocean Kubernetes node pools | <pre>map(object({<br>    size        = string<br>    node_count  = number<br>    auto_scale  = bool<br>    min_nodes   = number<br>    max_nodes   = number<br>    node_tags   = list(string)<br>    node_labels = map(string)<br>    node_taint  = map(string)<br>  }))</pre> | `{}` | no |
+| <a name="input_auto_scale"></a> [auto\_scale](#input\_auto\_scale) | (optional) | `bool` | `null` | no |
+| <a name="input_cluster_id"></a> [cluster\_id](#input\_cluster\_id) | (required) | `string` | n/a | yes |
+| <a name="input_labels"></a> [labels](#input\_labels) | (optional) | `map(string)` | `null` | no |
+| <a name="input_max_nodes"></a> [max\_nodes](#input\_max\_nodes) | (optional) | `number` | `null` | no |
+| <a name="input_min_nodes"></a> [min\_nodes](#input\_min\_nodes) | (optional) | `number` | `null` | no |
+| <a name="input_name"></a> [name](#input\_name) | (required) | `string` | n/a | yes |
+| <a name="input_node_count"></a> [node\_count](#input\_node\_count) | (optional) | `number` | `null` | no |
+| <a name="input_size"></a> [size](#input\_size) | (required) | `string` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | (optional) | `set(string)` | `null` | no |
+| <a name="input_taint"></a> [taint](#input\_taint) | nested block: NestingSet, min items: 0, max items: 0 | <pre>set(object(<br>    {<br>      effect = string<br>      key    = string<br>      value  = string<br>    }<br>  ))</pre> | `[]` | no |
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_actual_node_count"></a> [actual\_node\_count](#output\_actual\_node\_count) | A computed field representing the actual number of nodes in the node pool, which is especially useful when auto-scaling is enabled. |
+| <a name="output_id"></a> [id](#output\_id) | A unique ID that can be used to identify and reference the node pool. |
+| <a name="output_nodes"></a> [nodes](#output\_nodes) | A list of nodes in the pool. Each node exports the following attributes: |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

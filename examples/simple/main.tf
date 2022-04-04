@@ -10,27 +10,25 @@ module "kubernetes" {
 
 module "kubernetes_node_pool" {
   source     = "../../"
+  auto_scale = true
   cluster_id = module.kubernetes.id
-  node_pools = {
-    "ops" = {
-      auto_scale = true
-      min_nodes  = 1
-      max_nodes  = 3
-      node_count = 1
-      size       = "s-1vcpu-2gb"
-      node_labels = {
-        env     = "dev"
-        service = "kubernetes"
-        made-by = "terraform"
-      }
-      node_taint = {
-        key    = "workloadKind"
-        value  = "example"
-        effect = "NoSchedule"
-      }
-      node_tags = ["kubernetes", "nodes"]
-    }
+  labels = {
+    env     = "dev"
+    service = "kubernetes"
+    made-by = "terraform"
   }
+  max_nodes  = 2
+  min_nodes  = 1
+  name       = "dev"
+  node_count = 1
+  size       = "s-1vcpu-2gb"
+  tags       = ["kubernetes", "nodes"]
+
+  taint = [{
+    key    = "workloadKind"
+    value  = "dev"
+    effect = "NoSchedule"
+  }]
 }
 
 provider "digitalocean" {

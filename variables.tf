@@ -1,19 +1,62 @@
-variable "node_pools" {
-  description = "Digitalocean Kubernetes node pools"
-  type = map(object({
-    size        = string
-    node_count  = number
-    auto_scale  = bool
-    min_nodes   = number
-    max_nodes   = number
-    node_tags   = list(string)
-    node_labels = map(string)
-    node_taint  = map(string)
-  }))
-  default = {}
+variable "auto_scale" {
+  description = "(optional)"
+  type        = bool
+  default     = null
 }
 
 variable "cluster_id" {
-  description = "The ID of the Kubernetes cluster to which the node pool is associated."
+  description = "(required)"
   type        = string
+}
+
+variable "labels" {
+  description = "(optional)"
+  type        = map(string)
+  default     = null
+}
+
+variable "max_nodes" {
+  description = "(optional)"
+  type        = number
+  default     = null
+}
+
+variable "min_nodes" {
+  description = "(optional)"
+  type        = number
+  default     = null
+}
+
+variable "name" {
+  description = "(required)"
+  type        = string
+}
+
+variable "node_count" {
+  description = "(optional)"
+  type        = number
+  default     = null
+}
+
+variable "size" {
+  description = "(required)"
+  type        = string
+}
+
+variable "tags" {
+  description = "(optional)"
+  type        = set(string)
+  default     = null
+}
+
+variable "taint" {
+  description = "nested block: NestingSet, min items: 0, max items: 0"
+  type = set(object(
+    {
+      effect = string
+      key    = string
+      value  = string
+    }
+  ))
+  default = []
 }
